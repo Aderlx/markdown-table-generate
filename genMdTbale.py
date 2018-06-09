@@ -20,7 +20,7 @@ Options:
 from docopt import docopt
 import csv
 
-__version__ = "0.1.0"
+__version__ = "0.1.1"
 
 
 class rfile(object):
@@ -52,18 +52,27 @@ class generateTable(object):
         self.align = align
         self.num = len(content[0])
 
+
+    def replaceShu(self,s):
+        """
+        去掉 字符串中的 |
+        :return:
+        str
+        """
+        return s.replace('|', '&#124;')
+
     def genHeader(self):
         if self.align == 'r':
-            s = self.AlignRight * self.num
+            s = self.AlignRight * self.num + '|'
         elif self.align == 'l':
-            s = self.AlignLeft * self.num
+            s = self.AlignLeft * self.num + '|'
         else:
-            s = self.Centered * self.num
+            s = self.Centered * self.num + '|'
 
         return s
 
     def genBody(self):
-        contentList = ['| ' + '| '.join(c) + ' |' for c in self.content]
+        contentList = ['| ' + '| '.join([self.replaceShu(i) for i in c]) + ' |' for c in self.content]
         return contentList
 
     def getTableList(self):
